@@ -81,3 +81,19 @@ ON `course_teacher`.`teacher_id` = `teachers`.`id`
 WHERE `departments`.`name` = 'Dipartimento di Matematica'
 
 7. BONUS: Selezionare per ogni studente quanti tentativi d’esame ha sostenuto per superare ciascuno dei suoi esami
+
+SELECT `students`.`id` AS `students_id`, 
+	   `students`.`surname` AS `students_surname`,
+       `students`.`name` AS `students_name`,
+       COUNT(`exam_student`.`vote`),
+       `courses`.`name`,
+       MAX(`exam_student`.`vote`) AS `max_vote`
+FROM `students`
+JOIN `exam_student`
+ON `exam_student`.`student_id` = `students`.`id`
+JOIN `exams`
+ON `exam_student`.`exam_id` = `exams`.`id`
+JOIN `courses`
+ON `exams`.`course_id` = `courses`.`id`
+GROUP BY `students`.`id`, `courses`.`id`
+HAVING `max_vote` >= 18;
